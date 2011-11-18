@@ -28,7 +28,7 @@ MY_DEFS := '-DNO_TCMALLOC' \
     '-DWEBRTC_TARGET_PC' \
     '-DWEBRTC_LINUX' \
     '-DWEBRTC_THREAD_RR'
-ifeq ($(TARGET_ARCH),arm) 
+ifneq ($(filter arm mips,$(TARGET_ARCH)),)
 MY_DEFS += \
     '-DWEBRTC_ANDROID' \
     '-DANDROID' 
