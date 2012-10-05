@@ -43,6 +43,31 @@ MY_WEBRTC_COMMON_DEFS += \
     '-DWEBRTC_ARCH_ARM_V7A'
 endif
 
+else ifeq ($(TARGET_ARCH),mips)
+    ifneq ($(ARCH_HAS_BIGENDIAN),true)
+       ifeq ($(ARCH_MIPS_DSP_REV),2)
+            MY_WEBRTC_COMMON_DEFS += -DMIPS_DSP_R2_LE
+            MY_WEBRTC_COMMON_DEFS += -DMIPS_DSP_R1_LE
+            MY_WEBRTC_COMMON_DEFS += -DMIPS32_R2_LE
+            MY_WEBRTC_COMMON_DEFS += -DMIPS32_LE
+        else ifeq ($(ARCH_MIPS_DSP_REV),1)
+            MY_WEBRTC_COMMON_DEFS += -DMIPS_DSP_R1_LE
+            MY_WEBRTC_COMMON_DEFS += -DMIPS32_R2_LE
+            MY_WEBRTC_COMMON_DEFS += -DMIPS32_LE
+        else ifeq ($(TARGET_ARCH_VARIANT),mips32-fp)
+            MY_WEBRTC_COMMON_DEFS += -DMIPS32_LE
+        else ifeq ($(TARGET_ARCH_VARIANT),mips32)
+            MY_WEBRTC_COMMON_DEFS += -DMIPS32_LE
+        else
+            MY_WEBRTC_COMMON_DEFS += -DMIPS32_R2_LE
+            MY_WEBRTC_COMMON_DEFS += -DMIPS32_LE
+        endif
+
+        ifeq ($(ARCH_MIPS_HAS_FPU),true)
+            MY_WEBRTC_COMMON_DEFS += -DMIPS_FPU_LE
+        endif
+    endif
+
 else ifeq ($(TARGET_ARCH),x86)
 MY_WEBRTC_COMMON_DEFS += \
     '-DWEBRTC_USE_SSE2'

@@ -54,4 +54,14 @@ void aec_rdft_init_sse2(void);
 void aec_rdft_forward_128(float *a);
 void aec_rdft_inverse_128(float *a);
 
+#if defined(MIPS32_LE)
+void bitrv2_32_mips(int n, int *ip, float *a);
+void bitrv2_128_mips(int n, int *ip, float *a);
+void cft1st_128_mips(float *a);
+void cftmdl_128_mips(float *a);
+void rftfsub_128_mips(float *a);
+void rftbsub_128_mips(float *a);
+void aec_rdft_init_mips(void);
+#endif //#if defined(MIPS32_LE)
+
 #endif  // WEBRTC_MODULES_AUDIO_PROCESSING_AEC_MAIN_SOURCE_AEC_RDFT_H_
