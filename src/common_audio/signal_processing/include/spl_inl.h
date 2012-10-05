@@ -19,6 +19,10 @@
 #include "spl_inl_armv7.h"
 #else
 
+#if defined(MIPS_DSP_R1_LE)
+#include "spl_inl_mips.h"
+#else
+
 static __inline WebRtc_Word16 WebRtcSpl_SatW32ToW16(WebRtc_Word32 value32) {
   WebRtc_Word16 out16 = (WebRtc_Word16) value32;
 
@@ -153,6 +157,7 @@ static __inline int32_t WebRtc_MulAccumW16(int16_t a,
                                           int32_t c) {
   return (a * b + c);
 }
+#endif //#if defined(MIPS_DSP_R1_LE)
 
 #endif  // WEBRTC_ARCH_ARM_V7A
 

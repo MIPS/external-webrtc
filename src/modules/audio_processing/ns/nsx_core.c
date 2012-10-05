@@ -434,6 +434,7 @@ SynthesisUpdate WebRtcNsx_SynthesisUpdate;
 AnalysisUpdate WebRtcNsx_AnalysisUpdate;
 Denormalize WebRtcNsx_Denormalize;
 CreateComplexBuffer WebRtcNsx_CreateComplexBuffer;
+UpdateNoiseEstimate_t WebRtcNsx_UpdateNoiseEstimate;
 
 // Update the noise estimation information.
 static void UpdateNoiseEstimate(NsxInst_t* inst, int offset) {
@@ -572,7 +573,7 @@ static void NoiseEstimationC(NsxInst_t* inst,
     if (counter >= END_STARTUP_LONG) {
       inst->noiseEstCounter[s] = 0;
       if (inst->blockIndex >= END_STARTUP_LONG) {
-        UpdateNoiseEstimate(inst, offset);
+        WebRtcNsx_UpdateNoiseEstimate(inst, offset);
       }
     }
     inst->noiseEstCounter[s]++;
@@ -581,7 +582,7 @@ static void NoiseEstimationC(NsxInst_t* inst,
 
   // Sequentially update the noise during startup
   if (inst->blockIndex < END_STARTUP_LONG) {
-    UpdateNoiseEstimate(inst, offset);
+    WebRtcNsx_UpdateNoiseEstimate(inst, offset);
   }
 
   for (i = 0; i < inst->magnLen; i++) {
@@ -873,6 +874,7 @@ WebRtc_Word32 WebRtcNsx_InitCore(NsxInst_t* inst, WebRtc_UWord32 fs) {
   WebRtcNsx_AnalysisUpdate = AnalysisUpdateC;
   WebRtcNsx_Denormalize = DenormalizeC;
   WebRtcNsx_CreateComplexBuffer = CreateComplexBufferC;
+  WebRtcNsx_UpdateNoiseEstimate = UpdateNoiseEstimate;
 
 #ifdef WEBRTC_DETECT_ARM_NEON
     uint64_t features = WebRtc_GetCPUFeaturesARM();
@@ -882,6 +884,10 @@ WebRtc_Word32 WebRtcNsx_InitCore(NsxInst_t* inst, WebRtc_UWord32 fs) {
     }
 #elif defined(WEBRTC_ARCH_ARM_NEON)
     WebRtcNsx_InitNeon();
+#endif
+
+#if defined(MIPS32_LE)
+    WebRtcNsx_InitMips();
 #endif
 
   inst->initFlag = 1;
