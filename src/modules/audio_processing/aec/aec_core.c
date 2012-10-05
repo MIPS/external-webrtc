@@ -45,7 +45,11 @@ static const int freqAvgIc = PART_LEN / 2;
 // Matlab code to produce table:
 // win = sqrt(hanning(63)); win = [0 ; win(1:32)];
 // fprintf(1, '\t%.14f, %.14f, %.14f,\n', win);
+#if defined(__mips__)
+const float sqrtHanning[65] = {
+#else
 static const float sqrtHanning[65] = {
+#endif
     0.00000000000000f, 0.02454122852291f, 0.04906767432742f,
     0.07356456359967f, 0.09801714032956f, 0.12241067519922f,
     0.14673047445536f, 0.17096188876030f, 0.19509032201613f,
@@ -109,7 +113,9 @@ static void ProcessBlock(aec_t* aec);
 
 static void NonLinearProcessing(aec_t *aec, short *output, short *outputH);
 
+#if !defined(__mips__)
 static void GetHighbandGain(const float *lambda, float *nlpGainHband);
+#endif
 
 // Comfort_noise also computes noise for H band returned in comfortNoiseHband
 static void ComfortNoise(aec_t *aec, float efw[2][PART_LEN1],
@@ -118,7 +124,9 @@ static void ComfortNoise(aec_t *aec, float efw[2][PART_LEN1],
 
 static void WebRtcAec_InitLevel(power_level_t *level);
 static void WebRtcAec_InitStats(stats_t *stats);
+#if !defined(__mips__)
 static void UpdateLevel(power_level_t* level, float in[2][PART_LEN1]);
+#endif
 static void UpdateMetrics(aec_t *aec);
 // Convert from time domain to frequency domain. Note that |time_data| are
 // overwritten.
@@ -381,6 +389,7 @@ WebRtcAec_FilterFar_t WebRtcAec_FilterFar;
 WebRtcAec_ScaleErrorSignal_t WebRtcAec_ScaleErrorSignal;
 WebRtcAec_FilterAdaptation_t WebRtcAec_FilterAdaptation;
 WebRtcAec_OverdriveAndSuppress_t WebRtcAec_OverdriveAndSuppress;
+WebRtcAec_NonLinearProcessing_t WebRtcAec_NonLinearProcessing;
 
 int WebRtcAec_InitAec(aec_t *aec, int sampFreq)
 {
@@ -516,6 +525,10 @@ int WebRtcAec_InitAec(aec_t *aec, int sampFreq)
     WebRtcAec_ScaleErrorSignal = ScaleErrorSignal;
     WebRtcAec_FilterAdaptation = FilterAdaptation;
     WebRtcAec_OverdriveAndSuppress = OverdriveAndSuppress;
+    WebRtcAec_NonLinearProcessing = NonLinearProcessing;
+#if defined(__mips__)
+    WebRtcAec_InitAec_Mips();
+#endif
     if (WebRtc_GetCPUInfo(kSSE2)) {
 #if defined(WEBRTC_USE_SSE2)
       WebRtcAec_InitAec_SSE2();
@@ -819,7 +832,7 @@ static void ProcessBlock(aec_t* aec) {
     // Scale error signal inversely with far power.
     WebRtcAec_ScaleErrorSignal(aec, ef);
     WebRtcAec_FilterAdaptation(aec, fft, ef);
-    NonLinearProcessing(aec, output, outputH);
+    WebRtcAec_NonLinearProcessing(aec, output, outputH);
 
     if (aec->metricsMode == 1) {
         // Update power levels and echo metrics
@@ -1191,7 +1204,11 @@ static void NonLinearProcessing(aec_t *aec, short *output, short *outputH)
         sizeof(complex_t) * PART_LEN1);
 }
 
+#if defined(__mips__)
+void GetHighbandGain(const float *lambda, float *nlpGainHband)
+#else
 static void GetHighbandGain(const float *lambda, float *nlpGainHband)
+#endif
 {
     int i;
 
@@ -1313,7 +1330,11 @@ static void WebRtcAec_InitStats(stats_t *stats)
     stats->hicounter = 0;
 }
 
+#if defined(__mips__)
+void UpdateLevel(power_level_t* level, float in[2][PART_LEN1]) {
+#else
 static void UpdateLevel(power_level_t* level, float in[2][PART_LEN1]) {
+#endif
   // Do the energy calculation in the frequency domain. The FFT is performed on
   // a segment of PART_LEN2 samples due to overlap, but we only want the energy
   // of half that data (the last PART_LEN samples). Parseval's relation states

@@ -371,5 +371,72 @@ extern InverseFFTAndWindow WebRtcAecm_InverseFFTAndWindow;
 // Initialization of the above function pointers for ARM Neon.
 void WebRtcAecm_InitNeon(void);
 
+///////////////////////////////////////////////////////////////////////////////
+// Some function pointers, for internal functions shared by MIPS and
+// generic C code.
+//
+typedef int (*TimeToFrequencyDomain_t) (
+    const WebRtc_Word16* time_signal,
+    complex16_t* freq_signal,
+    WebRtc_UWord16* freq_signal_abs,
+    WebRtc_UWord32* freq_signal_sum_abs);
+extern TimeToFrequencyDomain_t WebRtcAecm_TimeToFrequencyDomain;
+
+#if defined(__mips__)
+void WindowAndFFT_mips(WebRtc_Word16* fft,
+                       const WebRtc_Word16* time_signal,
+                       complex16_t* freq_signal,
+                       int time_signal_scaling);
+
+void InverseFFTAndWindow_mips(AecmCore_t* aecm,
+                              WebRtc_Word16* fft,
+                              complex16_t* efw,
+                              WebRtc_Word16* output,
+                              const WebRtc_Word16* nearendClean);
+
+int TimeToFrequencyDomain_mips(const WebRtc_Word16* time_signal,
+                               complex16_t* freq_signal,
+                               WebRtc_UWord16* freq_signal_abs,
+                               WebRtc_UWord32* freq_signal_sum_abs);
+
+int WebRtcAecm_ProcessBlock_mips(AecmCore_t * aecm,
+                                 const WebRtc_Word16 * farend,
+                                 const WebRtc_Word16 * nearendNoisy,
+                                 const WebRtc_Word16 * nearendClean,
+                                 WebRtc_Word16 * output);
+
+void ComfortNoise_mips(AecmCore_t* aecm,
+                       const WebRtc_UWord16* dfa,
+                       complex16_t* out,
+                       const WebRtc_Word16* lambda);
+
+void WebRtcAecm_InitMips(void);
+WebRtc_Word16 WebRtcAecm_CalcStepSize(AecmCore_t * const aecm);
+
+void WebRtcAecm_CalcEnergies(AecmCore_t * aecm,
+                             const WebRtc_UWord16* far_spectrum,
+                             const WebRtc_Word16 far_q,
+                             const WebRtc_UWord32 nearEner,
+                             WebRtc_Word32 * echoEst);
+
+void WebRtcAecm_UpdateChannel(AecmCore_t * aecm,
+                              const WebRtc_UWord16* far_spectrum,
+                              const WebRtc_Word16 far_q,
+                              const WebRtc_UWord16 * const dfa,
+                              const WebRtc_Word16 mu,
+                              WebRtc_Word32 * echoEst);
+
+void UpdateFarHistory(AecmCore_t* self,
+                      uint16_t* far_spectrum,
+                      int far_q);
+
+const uint16_t* AlignedFarend(AecmCore_t* self, int* far_q, int delay);
+
+WebRtc_Word16 CalcSuppressionGain(AecmCore_t * const aecm);
+
+extern const WebRtc_Word16 kCosTable[];
+extern const WebRtc_Word16 kSinTable[];
+
+#endif //#if defined(__mips__)
 
 #endif

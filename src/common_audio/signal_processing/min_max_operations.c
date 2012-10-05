@@ -28,7 +28,7 @@
 
 #include "signal_processing_library.h"
 
-#if !(defined(WEBRTC_ANDROID) && defined(WEBRTC_ARCH_ARM_NEON))
+#if !(defined(WEBRTC_ANDROID) && defined(WEBRTC_ARCH_ARM_NEON)) && !(defined(__mips__))
 
 // Maximum absolute value of word16 vector.
 WebRtc_Word16 WebRtcSpl_MaxAbsValueW16(const WebRtc_Word16 *vector, WebRtc_Word16 length)

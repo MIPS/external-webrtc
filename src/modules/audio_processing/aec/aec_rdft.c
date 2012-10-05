@@ -42,6 +42,7 @@ ALIGN16_BEG float ALIGN16_END cftmdl_wk1r[4];
 
 static int ip[16];
 
+#if !(defined(__mips__))
 static void bitrv2_32or128(int n, int *ip, float *a) {
   // n is 32 or 128
   int j, j1, k, k1, m, m2;
@@ -115,6 +116,7 @@ static void bitrv2_32or128(int n, int *ip, float *a) {
     a[k1 + 1] = xi;
   }
 }
+#endif //#if !(defined(__mips__))
 
 static void makewt_32(void) {
   const int nw = 32;
@@ -137,7 +139,11 @@ static void makewt_32(void) {
     rdft_w[nw - j] = y;
     rdft_w[nw - j + 1] = x;
   }
+#if defined(__mips__)
+  bitrv2_32_mips(nw, ip + 2, rdft_w);
+#else
   bitrv2_32or128(nw, ip + 2, rdft_w);
+#endif
 
   // pre-calculate constants used by cft1st_128 and cftmdl_128...
   cftmdl_wk1r[0] = rdft_w[2];
@@ -547,7 +553,11 @@ void aec_rdft_forward_128(float *a) {
   const int n = 128;
   float xi;
 
+#if defined(__mips__)
+  bitrv2_128_mips(n, ip + 2, a);
+#else
   bitrv2_32or128(n, ip + 2, a);
+#endif
   cftfsub_128(a);
   rftfsub_128(a);
   xi = a[0] - a[1];
@@ -561,7 +571,11 @@ void aec_rdft_inverse_128(float *a) {
   a[1] = 0.5f * (a[0] - a[1]);
   a[0] -= a[1];
   rftbsub_128(a);
+#if defined(__mips__)
+  bitrv2_128_mips(n, ip + 2, a);
+#else
   bitrv2_32or128(n, ip + 2, a);
+#endif
   cftbsub_128(a);
 }
 
@@ -576,6 +590,9 @@ void aec_rdft_init(void) {
   cftmdl_128 = cftmdl_128_C;
   rftfsub_128 = rftfsub_128_C;
   rftbsub_128 = rftbsub_128_C;
+#if defined(__mips__)
+  aec_rdft_init_mips();
+#endif
   if (WebRtc_GetCPUInfo(kSSE2)) {
 #if defined(WEBRTC_USE_SSE2)
     aec_rdft_init_sse2();

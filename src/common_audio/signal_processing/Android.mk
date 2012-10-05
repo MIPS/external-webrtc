@@ -72,6 +72,14 @@ LOCAL_SRC_FILES += \
     spl_sqrt_floor.c
 endif
 
+ifeq ($(TARGET_ARCH),mips)
+LOCAL_SRC_FILES += \
+    min_max_operations_mips.c \
+    complex_fft_mips.c \
+    complex_bit_reverse_mips.c \
+    resample_by_2_mips.c
+endif
+
 LOCAL_SHARED_LIBRARIES := libstlport
 
 ifeq ($(TARGET_OS)-$(TARGET_SIMULATOR),linux-true)

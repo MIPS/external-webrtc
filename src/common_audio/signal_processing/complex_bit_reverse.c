@@ -15,6 +15,8 @@
  *
  */
 
+#if !defined(__mips__)
+
 #include "signal_processing_library.h"
 
 void WebRtcSpl_ComplexBitReverse(WebRtc_Word16 frfi[], int stages)
@@ -49,3 +51,5 @@ void WebRtcSpl_ComplexBitReverse(WebRtc_Word16 frfi[], int stages)
         frfi[2 * mr + 1] = ti;
     }
 }
+
+#endif //#if !defined(__mips__)
