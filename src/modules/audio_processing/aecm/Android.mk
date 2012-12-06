@@ -23,11 +23,6 @@ LOCAL_SRC_FILES := \
     echo_control_mobile.c \
     aecm_core.c
 
-ifeq ($(TARGET_ARCH),mips)
-LOCAL_SRC_FILES += \
-    aecm_core_mips.c
-endif
-
 # Flags passed to both C and C++ files.
 LOCAL_CFLAGS := $(MY_WEBRTC_COMMON_DEFS)
 

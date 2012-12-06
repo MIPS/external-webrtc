@@ -215,28 +215,6 @@ extern const WebRtc_Word16 WebRtcNsx_kLogTable[9];
 extern const WebRtc_Word16 WebRtcNsx_kLogTableFrac[256];
 extern const WebRtc_Word16 WebRtcNsx_kCounterDiv[201];
 
-/****************************************************************************
- * Some function pointers, for internal functions shared by MIPS and
- * generic C code.
- */
-typedef void (*UpdateNoiseEstimate_t) (NsxInst_t* inst,
-                                       int offset);
-extern UpdateNoiseEstimate_t WebRtcNsx_UpdateNoiseEstimate;
-
-#if defined(__mips__)
-void SynthesisUpdate_mips(NsxInst_t* inst,
-                          int16_t* out_frame,
-                          int16_t gain_factor);
-
-void AnalysisUpdate_mips(NsxInst_t* inst,
-                         int16_t* out,
-                         int16_t* new_speech);
-
-void WebRtcNsx_InitMips(void);
-void UpdateNoiseEstimate_mips(NsxInst_t* inst, int offset);
-void NoiseEstimation_mips(NsxInst_t* inst, uint16_t* magn, uint32_t* noise, int16_t* q_noise);
-#endif //#if defined(__mips__)
-
 #ifdef __cplusplus
 }
 #endif

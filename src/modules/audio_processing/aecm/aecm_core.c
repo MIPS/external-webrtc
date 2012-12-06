@@ -103,11 +103,7 @@ static const WebRtc_Word16 kChannelStored16kHz[PART_LEN1] = {
     3153
 };
 
-#if defined(__mips__)
-const WebRtc_Word16 kCosTable[] = {
-#else
 static const WebRtc_Word16 kCosTable[] = {
-#endif
     8192,  8190,  8187,  8180,  8172,  8160,  8147,  8130,  8112,
     8091,  8067,  8041,  8012,  7982,  7948,  7912,  7874,  7834,
     7791,  7745,  7697,  7647,  7595,  7540,  7483,  7424,  7362,
@@ -150,11 +146,7 @@ static const WebRtc_Word16 kCosTable[] = {
     8091,  8112,  8130,  8147,  8160,  8172,  8180,  8187,  8190
 };
 
-#if defined(__mips__)
-const WebRtc_Word16 kSinTable[] = {
-#else
 static const WebRtc_Word16 kSinTable[] = {
-#endif
        0,    142,    285,    428,    571,    713,    856,    998,
     1140,   1281,   1422,   1563,   1703,   1842,   1981,   2120,
     2258,   2395,   2531,   2667,   2801,   2935,   3068,   3200,
@@ -210,14 +202,7 @@ static void ComfortNoise(AecmCore_t* aecm,
                          complex16_t* out,
                          const WebRtc_Word16* lambda);
 
-#if defined(__mips__)
-WebRtc_Word16 CalcSuppressionGain(AecmCore_t * const aecm);
-#else
 static WebRtc_Word16 CalcSuppressionGain(AecmCore_t * const aecm);
-#endif
-
-static int TimeToFrequencyDomain(const WebRtc_Word16* time_signal, complex16_t* freq_signal, WebRtc_UWord16* freq_signal_abs, WebRtc_UWord32* freq_signal_sum_abs);
-
 
 // Moves the pointer to the next entry and inserts |far_spectrum| and
 // corresponding Q-domain in its buffer.
@@ -227,15 +212,9 @@ static int TimeToFrequencyDomain(const WebRtc_Word16* time_signal, complex16_t* 
 //      - far_spectrum  : Pointer to the far end spectrum
 //      - far_q         : Q-domain of far end spectrum
 //
-#if defined(__mips__)
-void UpdateFarHistory(AecmCore_t* self,
-                      uint16_t* far_spectrum,
-                      int far_q) {
-#else
 static void UpdateFarHistory(AecmCore_t* self,
                              uint16_t* far_spectrum,
                              int far_q) {
-#endif
   // Get new buffer position
   self->far_history_pos++;
   if (self->far_history_pos >= MAX_DELAY) {
@@ -266,11 +245,7 @@ static void UpdateFarHistory(AecmCore_t* self,
 //      - far_spectrum      : Pointer to the aligned far end spectrum
 //                            NULL - Error
 //
-#if defined(__mips__)
-const uint16_t* AlignedFarend(AecmCore_t* self, int* far_q, int delay) {
-#else
 static const uint16_t* AlignedFarend(AecmCore_t* self, int* far_q, int delay) {
-#endif
   int buffer_position = 0;
   assert(self != NULL);
   buffer_position = self->far_history_pos - delay;
@@ -295,7 +270,6 @@ StoreAdaptiveChannel WebRtcAecm_StoreAdaptiveChannel;
 ResetAdaptiveChannel WebRtcAecm_ResetAdaptiveChannel;
 WindowAndFFT WebRtcAecm_WindowAndFFT;
 InverseFFTAndWindow WebRtcAecm_InverseFFTAndWindow;
-TimeToFrequencyDomain_t WebRtcAecm_TimeToFrequencyDomain;
 
 int WebRtcAecm_CreateCore(AecmCore_t **aecmInst)
 {
@@ -695,7 +669,6 @@ int WebRtcAecm_InitCore(AecmCore_t * const aecm, int samplingFreq)
     WebRtcAecm_CalcLinearEnergies = CalcLinearEnergiesC;
     WebRtcAecm_StoreAdaptiveChannel = StoreAdaptiveChannelC;
     WebRtcAecm_ResetAdaptiveChannel = ResetAdaptiveChannelC;
-    WebRtcAecm_TimeToFrequencyDomain = TimeToFrequencyDomain;
 
 #ifdef WEBRTC_DETECT_ARM_NEON
     uint64_t features = WebRtc_GetCPUFeaturesARM();
@@ -705,10 +678,6 @@ int WebRtcAecm_InitCore(AecmCore_t * const aecm, int samplingFreq)
     }
 #elif defined(WEBRTC_ARCH_ARM_NEON)
     WebRtcAecm_InitNeon();
-#endif
-
-#if defined(__mips__)
-    WebRtcAecm_InitMips();
 #endif
 
     return 0;
@@ -792,37 +761,21 @@ int WebRtcAecm_ProcessFrame(AecmCore_t * aecm,
                               (void**) &near_clean_block_ptr,
                               near_clean_block,
                               PART_LEN);
-#if defined(__mips__)
-            if (WebRtcAecm_ProcessBlock_mips(aecm,
-                                             far_block_ptr,
-                                             near_noisy_block_ptr,
-                                             near_clean_block_ptr,
-                                             outBlock) == -1)
-#else
             if (WebRtcAecm_ProcessBlock(aecm,
                                         far_block_ptr,
                                         near_noisy_block_ptr,
                                         near_clean_block_ptr,
                                         outBlock) == -1)
-#endif  //#if defined(__mips__)
             {
                 return -1;
             }
         } else
         {
-#if defined(__mips__)
-            if (WebRtcAecm_ProcessBlock_mips(aecm,
-                                             far_block_ptr,
-                                             near_noisy_block_ptr,
-                                             NULL,
-                                             outBlock) == -1)
-#else
             if (WebRtcAecm_ProcessBlock(aecm,
                                         far_block_ptr,
                                         near_noisy_block_ptr,
                                         NULL,
                                         outBlock) == -1)
-#endif  //#if defined(__mips__)
             {
                 return -1;
             }
@@ -1343,11 +1296,7 @@ void WebRtcAecm_UpdateChannel(AecmCore_t * aecm,
 //                          level (Q14).
 //
 //
-#if defined(__mips__)
-WebRtc_Word16 CalcSuppressionGain(AecmCore_t * const aecm)
-#else
 static WebRtc_Word16 CalcSuppressionGain(AecmCore_t * const aecm)
-#endif
 {
     WebRtc_Word32 tmp32no1;
 
@@ -1635,16 +1584,16 @@ int WebRtcAecm_ProcessBlock(AecmCore_t * aecm,
 #endif
 
     // Transform far end signal from time domain to frequency domain.
-    far_q = WebRtcAecm_TimeToFrequencyDomain(aecm->xBuf,
-                                             dfw,
-                                             xfa,
-                                             &xfaSum);
+    far_q = TimeToFrequencyDomain(aecm->xBuf,
+                                  dfw,
+                                  xfa,
+                                  &xfaSum);
 
     // Transform noisy near end signal from time domain to frequency domain.
-    zerosDBufNoisy = WebRtcAecm_TimeToFrequencyDomain(aecm->dBufNoisy,
-                                                      dfw,
-                                                      dfaNoisy,
-                                                      &dfaNoisySum);
+    zerosDBufNoisy = TimeToFrequencyDomain(aecm->dBufNoisy,
+                                           dfw,
+                                           dfaNoisy,
+                                           &dfaNoisySum);
     aecm->dfaNoisyQDomainOld = aecm->dfaNoisyQDomain;
     aecm->dfaNoisyQDomain = (WebRtc_Word16)zerosDBufNoisy;
 
@@ -1658,10 +1607,10 @@ int WebRtcAecm_ProcessBlock(AecmCore_t * aecm,
     } else
     {
         // Transform clean near end signal from time domain to frequency domain.
-        zerosDBufClean = WebRtcAecm_TimeToFrequencyDomain(aecm->dBufClean,
-                                                          dfw,
-                                                          dfaClean,
-                                                          &dfaCleanSum);
+        zerosDBufClean = TimeToFrequencyDomain(aecm->dBufClean,
+                                               dfw,
+                                               dfaClean,
+                                               &dfaCleanSum);
         aecm->dfaCleanQDomainOld = aecm->dfaCleanQDomain;
         aecm->dfaCleanQDomain = (WebRtc_Word16)zerosDBufClean;
     }

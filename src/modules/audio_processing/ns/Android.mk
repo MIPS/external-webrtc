@@ -22,11 +22,6 @@ LOCAL_SRC_FILES := \
     noise_suppression_x.c \
     nsx_core.c
 
-ifeq ($(TARGET_ARCH),mips)
-LOCAL_SRC_FILES += \
-    nsx_core_mips.c
-endif
-
 # Files for floating point.
 # noise_suppression.c ns_core.c 
 

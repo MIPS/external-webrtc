@@ -23,11 +23,6 @@ LOCAL_SRC_FILES := \
     aec_core_sse2.c \
     aec_rdft_sse2.c
 
-ifeq ($(TARGET_ARCH),mips)
-LOCAL_SRC_FILES += \
-    aec_core_mips.c \
-    aec_rdft_mips.c
-endif
 
 # Flags passed to both C and C++ files.
 LOCAL_CFLAGS := \

@@ -15,8 +15,6 @@
  *
  */
 
-#if !defined(__mips__)
-
 #include "signal_processing_library.h"
 
 #define CFFTSFT 14
@@ -425,4 +423,3 @@ int WebRtcSpl_ComplexIFFT(WebRtc_Word16 frfi[], int stages, int mode)
     }
     return scale;
 }
-#endif //#if !defined(__mips__)

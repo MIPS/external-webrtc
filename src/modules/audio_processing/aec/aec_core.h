@@ -163,8 +163,6 @@ extern WebRtcAec_FilterAdaptation_t WebRtcAec_FilterAdaptation;
 typedef void (*WebRtcAec_OverdriveAndSuppress_t)
   (aec_t *aec, float hNl[PART_LEN1], const float hNlFb, float efw[2][PART_LEN1]);
 extern WebRtcAec_OverdriveAndSuppress_t WebRtcAec_OverdriveAndSuppress;
-typedef void (*WebRtcAec_NonLinearProcessing_t)(aec_t *aec, short *output, short *outputH);
-extern WebRtcAec_NonLinearProcessing_t WebRtcAec_NonLinearProcessing;
 
 int WebRtcAec_CreateAec(aec_t **aec);
 int WebRtcAec_FreeAec(aec_t *aec);
@@ -177,18 +175,5 @@ void WebRtcAec_ProcessFrame(aec_t* aec,
                             const short *nearend,
                             const short *nearendH,
                             int knownDelay);
-
-#if defined(__mips__)
-void FilterFar_mips(aec_t *aec, float yf[2][PART_LEN1]);
-void FilterAdaptation_mips(aec_t *aec, float *fft, float ef[2][PART_LEN1]);
-void NonLinearProcessing_mips(aec_t *aec, short *output, short *outputH);
-void ScaleErrorSignal_mips(aec_t *aec, float ef[2][PART_LEN1]);
-void WebRtcAec_InitAec_Mips(void);
-
-extern const float sqrtHanning[];
-
-void GetHighbandGain(const float *lambda, float *nlpGainHband);
-void UpdateLevel(power_level_t* level, float in[2][PART_LEN1]);
-#endif //#if defined(__mips__)
 
 #endif  // WEBRTC_MODULES_AUDIO_PROCESSING_AEC_MAIN_SOURCE_AEC_CORE_H_

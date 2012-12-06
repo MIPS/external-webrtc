@@ -82,7 +82,6 @@
     ((WebRtc_UWord32) ((WebRtc_UWord32)(a) / (WebRtc_UWord32)(b)))
 
 #ifndef WEBRTC_ARCH_ARM_V7A
-#if !(defined(__mips__) && defined(__mips_dsp))
 // For ARMv7 platforms, these are inline functions in spl_inl_armv7.h
 #define WEBRTC_SPL_MUL_16_16(a, b) \
     ((WebRtc_Word32) (((WebRtc_Word16)(a)) * ((WebRtc_Word16)(b))))
@@ -97,8 +96,7 @@
     (WebRtc_Word16)(a32 >> 16)), b32) + \
     (WEBRTC_SPL_MUL_16_32_RSFT16(( \
     (WebRtc_Word16)((a32 & 0x0000FFFF) >> 1)), b32) >> 15)))
-#endif  //#if !(defined(__mips__) && defined(__mips_dsp))
-#endif  //WEBRTC_ARCH_ARM_V7A
+#endif
 
 #define WEBRTC_SPL_MUL_16_32_RSFT11(a, b) \
     ((WEBRTC_SPL_MUL_16_16(a, (b) >> 16) << 5) \

@@ -64,7 +64,7 @@ static const WebRtc_UWord16 kResampleAllpass2[3] = {12199, 37471, 60255};
 
 #endif  // WEBRTC_ARCH_ARM_V7A
 
-#if !(defined(__mips__))
+
 // decimator
 void WebRtcSpl_DownsampleBy2(const WebRtc_Word16* in, const WebRtc_Word16 len,
                              WebRtc_Word16* out, WebRtc_Word32* filtState) {
@@ -121,8 +121,6 @@ void WebRtcSpl_DownsampleBy2(const WebRtc_Word16* in, const WebRtc_Word16 len,
   filtState[6] = state6;
   filtState[7] = state7;
 }
-
-#endif //#if !(defined(__mips__))
 
 
 void WebRtcSpl_UpsampleBy2(const WebRtc_Word16* in, WebRtc_Word16 len,
