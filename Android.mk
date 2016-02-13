@@ -42,6 +42,7 @@ LOCAL_WHOLE_STATIC_LIBRARIES_arm += \
 endif
 
 LOCAL_SHARED_LIBRARIES := \
+    liblog \
     libcutils \
     libdl \
     libprotobuf-cpp-lite \
@@ -73,6 +74,7 @@ endif
 
 LOCAL_SHARED_LIBRARIES := \
     libprotobuf-cpp-lite \
+    liblog \
     libcutils \
     libdl \
 
