@@ -98,9 +98,6 @@ LOCAL_WHOLE_STATIC_LIBRARIES_arm += \
     libwebrtc_isacfix_neon_gnustl_static
 endif
 
-LOCAL_STATIC_LIBRARIES := \
-    libprotobuf-cpp-lite
-
 LOCAL_NDK_STL_VARIANT := gnustl_static
 LOCAL_SDK_VERSION := 14
 
