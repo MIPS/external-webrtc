@@ -32,9 +32,8 @@ LOCAL_SRC_FILES := \
     sparse_fir_filter.cc \
     window_generator.cc \
 
-ifeq ($(TARGET_ARCH), $(filter $(TARGET_ARCH),x86 x86_64))
-LOCAL_SRC_FILES += fir_filter_sse.cc
-endif
+LOCAL_SRC_FILES_x86 += fir_filter_sse.cc
+LOCAL_SRC_FILES_x86_64 += fir_filter_sse.cc
 
 # Flags passed to both C and C++ files.
 LOCAL_CFLAGS := \
