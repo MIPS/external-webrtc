@@ -44,3 +44,32 @@ MY_WEBRTC_COMMON_DEFS_arm := \
 #MY_WEBRTC_COMMON_DEFS_arm += \
 #    '-DWEBRTC_ARCH_ARM_V7A'
 #endif
+
+# The following warnings are disabled in most webrtc modules,
+# until we upgrade to newer cleaner upstream webrtc.
+MY_WEBRTC_COMMON_CFLAGS_WARNINGS := \
+    -Wno-missing-field-initializers \
+    -Wno-unused-parameter \
+
+# The following clang-tidy checks are disabled in most webrtc modules,
+# until we upgrade to newer cleaner upstream webrtc.
+MY_WEBRTC_COMMON_TIDY_CHECKS := \
+    -cert-*, \
+    -clang-analyzer-*, \
+    -hicpp-*, \
+    -llvm-*, \
+    -google-build-namespaces, \
+    -google-default-arguments, \
+    -google-explicit-constructor, \
+    -google-runtime-int, \
+    -google-runtime-operator, \
+    -misc-incorrect-roundings, \
+    -misc-macro-parentheses, \
+    -misc-misplaced-widening-cast, \
+    -misc-noexcept-move-constructor, \
+    -misc-suspicious-string-compare, \
+    -misc-unused-parameters, \
+    -misc-unused-using-decls, \
+    -performance-type-promotion-in-math-fn, \
+    -performance-unnecessary-copy-initialization, \
+    -performance-unnecessary-value-param, \
