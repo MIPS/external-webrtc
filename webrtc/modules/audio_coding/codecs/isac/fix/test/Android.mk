@@ -39,14 +39,6 @@ LOCAL_STATIC_LIBRARIES := \
     libwebrtc_spl \
     libwebrtc_system_wrappers
 
-ifeq ($(WEBRTC_BUILD_NEON_LIBS),true)
-# We need to dup libwebrtc_isacfix because ibwebrtc_isacfix_neon
-# has dependency on it.
-LOCAL_STATIC_LIBRARIES_arm += \
-    libwebrtc_isacfix \
-    libwebrtc_isacfix_neon
-endif
-
 LOCAL_SHARED_LIBRARIES := \
     libutils
 

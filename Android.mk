@@ -35,13 +35,6 @@ LOCAL_WHOLE_STATIC_LIBRARIES := \
     libwebrtc_transient \
     libwebrtc_vad \
 
-# Add Neon libraries.
-ifeq ($(WEBRTC_BUILD_NEON_LIBS),true)
-LOCAL_WHOLE_STATIC_LIBRARIES_arm += \
-    libwebrtc_aecm_neon \
-    libwebrtc_ns_neon
-endif
-
 LOCAL_SHARED_LIBRARIES := \
     liblog \
     libcutils \
@@ -68,11 +61,6 @@ LOCAL_WHOLE_STATIC_LIBRARIES := \
     libwebrtc_resampler \
     libwebrtc_spl \
     libwebrtc_system_wrappers \
-
-ifeq ($(WEBRTC_BUILD_NEON_LIBS),true)
-LOCAL_WHOLE_STATIC_LIBRARIES_arm += \
-    libwebrtc_isacfix_neon
-endif
 
 LOCAL_SHARED_LIBRARIES := \
     libprotobuf-cpp-lite \
