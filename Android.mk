@@ -90,6 +90,7 @@ include $(webrtc_path)/webrtc/common_audio/Android.mk
 include $(webrtc_path)/webrtc/common_audio/resampler/Android.mk
 include $(webrtc_path)/webrtc/common_audio/signal_processing/Android.mk
 include $(webrtc_path)/webrtc/common_audio/vad/Android.mk
+include $(webrtc_path)/webrtc/modules/audio_coding/codecs/isac/fix/test/Android.mk
 include $(webrtc_path)/webrtc/modules/audio_coding/codecs/isac/fix/source/Android.mk
 include $(webrtc_path)/webrtc/modules/audio_coding/codecs/isac/main/source/Android.mk
 include $(webrtc_path)/webrtc/modules/audio_processing/Android.mk
