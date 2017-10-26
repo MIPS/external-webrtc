@@ -6,9 +6,6 @@
 # in the file PATENTS.  All contributing project authors may
 # be found in the AUTHORS file in the root of the source tree.
 
-#############################
-# Build the non-neon library.
-
 LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
@@ -50,34 +47,3 @@ LOCAL_C_INCLUDES := \
 LOCAL_STATIC_LIBRARIES += libwebrtc_system_wrappers
 
 include $(BUILD_STATIC_LIBRARY)
-
-#########################
-# Build the neon library.
-ifeq ($(WEBRTC_BUILD_NEON_LIBS),true)
-
-include $(CLEAR_VARS)
-
-LOCAL_ARM_MODE := arm
-LOCAL_MODULE_CLASS := STATIC_LIBRARIES
-LOCAL_MODULE := libwebrtc_aecm_neon
-LOCAL_VENDOR_MODULE := true
-LOCAL_MODULE_TAGS := optional
-
-LOCAL_SRC_FILES := aecm_core_neon.c
-
-# Flags passed to both C and C++ files.
-LOCAL_CFLAGS := \
-    $(MY_WEBRTC_COMMON_DEFS) \
-    -flax-vector-conversions
-
-LOCAL_MODULE_TARGET_ARCH := arm
-LOCAL_CFLAGS_arm := $(MY_WEBRTC_COMMON_DEFS_arm)
-
-LOCAL_C_INCLUDES := \
-    $(LOCAL_PATH)/include \
-    $(LOCAL_PATH)/../../.. \
-    $(LOCAL_PATH)/../../../common_audio/signal_processing/include
-
-include $(BUILD_STATIC_LIBRARY)
-
-endif # ifeq ($(WEBRTC_BUILD_NEON_LIBS),true)
