@@ -1,0 +1,6 @@
+subdirs = ["*"]
+
+cc_library_headers {
+    name: "libwebrtc_isacfix_headers",
+    export_include_dirs: ["include"],
+}
