@@ -25,8 +25,11 @@ cc_defaults {
         // "-DNETEQ_VOICEENGINE_CODECS", // [module audio_coding neteq]
         // "-DWEBRTC_MODULE_UTILITY_VIDEO", // [module media_file] [module utility]
 
+        "-Wall",
+        "-Werror",
         // The following warnings are disabled in most webrtc modules,
         // until we upgrade to newer cleaner upstream webrtc.
+        "-Wno-missing-braces",
         "-Wno-missing-field-initializers",
         "-Wno-unused-parameter",
     ],
