@@ -34,34 +34,22 @@ LOCAL_C_INCLUDES := \
     $(LOCAL_PATH)/../include \
     $(LOCAL_PATH)/../../../../../../..
 
-MY_LIB_SUFFIX :=
-ifdef WEBRTC_STL
-MY_LIB_SUFFIX := _$(WEBRTC_STL)
-endif
-
 LOCAL_STATIC_LIBRARIES := \
-    libwebrtc_isacfix$(MY_LIB_SUFFIX) \
-    libwebrtc_spl$(MY_LIB_SUFFIX) \
-    libwebrtc_system_wrappers$(MY_LIB_SUFFIX)
+    libwebrtc_isacfix \
+    libwebrtc_spl \
+    libwebrtc_system_wrappers
 
 ifeq ($(WEBRTC_BUILD_NEON_LIBS),true)
-# We need to dup libwebrtc_isacfix$(MY_LIB_SUFFIX) because ibwebrtc_isacfix_neon$(MY_LIB_SUFFIX)
+# We need to dup libwebrtc_isacfix because ibwebrtc_isacfix_neon
 # has dependency on it.
 LOCAL_STATIC_LIBRARIES_arm += \
-    libwebrtc_isacfix$(MY_LIB_SUFFIX) \
-    libwebrtc_isacfix_neon$(MY_LIB_SUFFIX)
+    libwebrtc_isacfix \
+    libwebrtc_isacfix_neon
 endif
 
 LOCAL_SHARED_LIBRARIES := \
     libutils
 
 LOCAL_MODULE := webrtc_isac_test
-
-ifdef WEBRTC_STL
-LOCAL_NDK_STL_VARIANT := $(WEBRTC_STL)
-LOCAL_SDK_VERSION := 14
-LOCAL_MODULE := $(LOCAL_MODULE)_$(WEBRTC_STL)
-LOCAL_SHARED_LIBRARIES :=
-endif
 
 include $(BUILD_NATIVE_TEST)

@@ -51,12 +51,6 @@ LOCAL_C_INCLUDES := \
 
 LOCAL_STATIC_LIBRARIES += libwebrtc_system_wrappers
 
-ifdef WEBRTC_STL
-LOCAL_NDK_STL_VARIANT := $(WEBRTC_STL)
-LOCAL_SDK_VERSION := 14
-LOCAL_MODULE := $(LOCAL_MODULE)_$(WEBRTC_STL)
-endif
-
 include $(BUILD_STATIC_LIBRARY)
 
 #############################
@@ -106,12 +100,6 @@ LOCAL_C_INCLUDES := \
     $(LOCAL_PATH)/../../../common_audio/signal_processing/include
 
 LOCAL_INCLUDES := $(LOCAL_C_INCLUDES)
-
-ifdef WEBRTC_STL
-LOCAL_NDK_STL_VARIANT := $(WEBRTC_STL)
-LOCAL_SDK_VERSION := 14
-LOCAL_MODULE := $(LOCAL_MODULE)_$(WEBRTC_STL)
-endif
 
 include $(BUILD_STATIC_LIBRARY)
 endif # ifeq ($(WEBRTC_BUILD_NEON_LIBS),true)

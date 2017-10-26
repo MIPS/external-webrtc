@@ -83,29 +83,6 @@ LOCAL_SHARED_LIBRARIES := \
 include $(BUILD_SHARED_LIBRARY)
 
 
-include $(CLEAR_VARS)
-include $(LOCAL_PATH)/android-webrtc.mk
-
-LOCAL_ARM_MODE := arm
-LOCAL_MODULE := libwebrtc_audio_coding_gnustl_static
-LOCAL_VENDOR_MODULE := true
-LOCAL_MODULE_TAGS := optional
-
-LOCAL_WHOLE_STATIC_LIBRARIES := \
-    libwebrtc_isac_gnustl_static \
-    libwebrtc_isacfix_gnustl_static \
-    libwebrtc_spl_gnustl_static \
-    libwebrtc_system_wrappers_gnustl_static
-ifeq ($(WEBRTC_BUILD_NEON_LIBS),true)
-LOCAL_WHOLE_STATIC_LIBRARIES_arm += \
-    libwebrtc_isacfix_neon_gnustl_static
-endif
-
-LOCAL_NDK_STL_VARIANT := gnustl_static
-LOCAL_SDK_VERSION := 14
-
-include $(BUILD_STATIC_LIBRARY)
-
 webrtc_path := $(LOCAL_PATH)
 # voice
 include $(webrtc_path)/webrtc/base/Android.mk
@@ -126,10 +103,3 @@ include $(webrtc_path)/webrtc/modules/audio_processing/transient/Android.mk
 include $(webrtc_path)/webrtc/modules/audio_processing/utility/Android.mk
 include $(webrtc_path)/webrtc/modules/audio_processing/vad/Android.mk
 include $(webrtc_path)/webrtc/system_wrappers/source/Android.mk
-
-# libwebrtc_audio_coding_gnustl_static dependencies
-WEBRTC_STL := gnustl_static
-include $(webrtc_path)/webrtc/system_wrappers/source/Android.mk
-include $(webrtc_path)/webrtc/modules/audio_coding/codecs/isac/fix/source/Android.mk
-include $(webrtc_path)/webrtc/modules/audio_coding/codecs/isac/main/source/Android.mk
-include $(webrtc_path)/webrtc/common_audio/signal_processing/Android.mk
